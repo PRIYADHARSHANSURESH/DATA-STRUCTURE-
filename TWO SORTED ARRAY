@@ -1,0 +1,69 @@
+double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size) {
+    int arr[nums1Size + nums2Size];
+    int index = 0;
+    for(int i = 0; i < nums1Size; i++, index++){
+        arr[index] = nums1[i];
+    }
+    for(int i = 0; i < nums2Size; i++, index++){
+        arr[index] = nums2[i];
+    }
+    mergesort(arr, 0, nums1Size + nums2Size - 1);
+    double median;
+    int mid = (nums1Size + nums2Size) / 2;
+
+    if((nums1Size + nums2Size) % 2 == 0){
+        median = (double)(arr[mid] + arr[mid-1]) / 2;
+    }
+    else{
+        median = (double)arr[mid];
+    }
+
+    return median;
+}
+
+void merge(int arr[], int first, int mid ,int last){
+    int len = last - first + 1; 
+    int temparr[2000];
+
+    int first1 = first;
+    int last1 = mid;
+    int first2 = mid + 1;
+    int last2 = last;
+    int index = first1;
+
+
+
+    for( ; (first1 <= last1) && (first2 <= last2); index++){
+        if(arr[first1] < arr[first2]){
+            temparr[index] = arr[first1];
+            first1++;
+        }
+        else{
+            temparr[index] = arr[first2];
+            first2++;
+        }
+    }
+
+    for(; first1 <= last1; first1++, index++){
+        temparr[index] = arr[first1];
+    }
+
+    for(; first2 <= last2; first2++, index++){
+        temparr[index] = arr[first2];
+    }
+
+    for(index = first ; index <= last ; index++){
+        arr[index] = temparr[index];
+    }
+}
+
+void mergesort(int arr[], int first, int last){
+
+    if ( first < last ) {
+        int mid = (first + last) / 2;
+        mergesort(arr, first, mid);
+        mergesort(arr, mid + 1,  last);
+        merge(arr, first, mid, last);
+    }
+
+}
